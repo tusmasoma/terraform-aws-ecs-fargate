@@ -6,6 +6,12 @@ This document is intended to describe the decisions and assumptions that went in
   <img src="./images/aws-ecs-on-fargate-arc.png" alt="ECS Design" width="80%">
 </p>
 
+## Module Design
+TODO: 執筆
+
+## Managing tfstate Files
+TODO: 執筆
+
 ## Deployment Pipeline
 TODO: 執筆
 
