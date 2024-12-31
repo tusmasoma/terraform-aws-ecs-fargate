@@ -32,17 +32,17 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_created_by"></a> [created\_by](#input\_created\_by) | tag description for resources made by terraform | `any` | n/a | yes |
-| <a name="input_env"></a> [env](#input\_env) | The environment to deploy to | `any` | n/a | yes |
+| <a name="input_created_by"></a> [created\_by](#input\_created\_by) | tag description for resources made by terraform | `string` | n/a | yes |
+| <a name="input_env"></a> [env](#input\_env) | The environment to deploy to | `string` | n/a | yes |
 | <a name="input_is_nat_gateway"></a> [is\_nat\_gateway](#input\_is\_nat\_gateway) | Whether to create a NAT Gateway | `bool` | `true` | no |
 | <a name="input_subnet_count"></a> [subnet\_count](#input\_subnet\_count) | The number of subnets to create | `number` | `2` | no |
-| <a name="input_system"></a> [system](#input\_system) | The system name | `any` | n/a | yes |
-| <a name="input_vpc_cidr"></a> [vpc\_cidr](#input\_vpc\_cidr) | The CIDR block for the VPC | `any` | n/a | yes |
+| <a name="input_system"></a> [system](#input\_system) | The system name | `string` | n/a | yes |
+| <a name="input_vpc_cidr"></a> [vpc\_cidr](#input\_vpc\_cidr) | The CIDR block for the VPC | `string` | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_private_subnet_ids"></a> [private\_subnet\_ids](#output\_private\_subnet\_ids) | n/a |
-| <a name="output_public_subnet_ids"></a> [public\_subnet\_ids](#output\_public\_subnet\_ids) | n/a |
-| <a name="output_vpc_id"></a> [vpc\_id](#output\_vpc\_id) | n/a |
+| <a name="output_private_subnet_ids"></a> [private\_subnet\_ids](#output\_private\_subnet\_ids) | The IDs of the private subnets |
+| <a name="output_public_subnet_ids"></a> [public\_subnet\_ids](#output\_public\_subnet\_ids) | The IDs of the public subnets |
+| <a name="output_vpc_id"></a> [vpc\_id](#output\_vpc\_id) | The ID of the VPC |
