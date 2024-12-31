@@ -29,7 +29,7 @@ resource "aws_route_table" "private" {
     for_each = var.is_nat_gateway ? [aws_nat_gateway.this] : []
     content {
       cidr_block     = "0.0.0.0/0"
-      nat_gateway_id = aws_nat_gateway.this[0].id
+      nat_gateway_id = route.value[0].id
     }
   }
   tags = {
