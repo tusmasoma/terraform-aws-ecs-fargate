@@ -14,7 +14,7 @@ variable "system" {
 }
 
 variable "created_by" {
-  description = "tag description for resources made by terraform"
+  description = "Tag description for resources made by terraform"
   type        = string
 }
 

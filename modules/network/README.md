@@ -32,7 +32,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_created_by"></a> [created\_by](#input\_created\_by) | tag description for resources made by terraform | `string` | n/a | yes |
+| <a name="input_created_by"></a> [created\_by](#input\_created\_by) | Tag description for resources made by terraform | `string` | n/a | yes |
 | <a name="input_env"></a> [env](#input\_env) | The environment to deploy to | `string` | n/a | yes |
 | <a name="input_is_nat_gateway"></a> [is\_nat\_gateway](#input\_is\_nat\_gateway) | Whether to create a NAT Gateway | `bool` | `true` | no |
 | <a name="input_subnet_count"></a> [subnet\_count](#input\_subnet\_count) | The number of subnets to create | `number` | `2` | no |
