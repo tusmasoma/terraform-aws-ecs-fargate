@@ -27,7 +27,6 @@ resource "aws_lb" "this" {
 ################################################################################
 resource "aws_s3_bucket" "this" {
   bucket = "${var.env}-${var.system}-alb-logs"
-  acl    = "private"
 
   force_destroy = true // For demo purposes only
 
@@ -36,6 +35,11 @@ resource "aws_s3_bucket" "this" {
     CreatedBy = var.created_by
   }
 }
+
+# resource "aws_s3_bucket_acl" "this" {
+#   bucket = aws_s3_bucket.this.id
+#   acl    = "log-delivery-write"
+# }
 
 resource "aws_s3_bucket_lifecycle_configuration" "this" {
   bucket = aws_s3_bucket.this.bucket
@@ -69,14 +73,33 @@ data "aws_iam_policy_document" "this" {
   statement {
     effect    = "Allow"
     actions   = ["s3:PutObject"]
-    resources = ["arn:aws:s3:::${aws_s3_bucket.this.bucket}/*"]
+    resources = ["arn:aws:s3:::${aws_s3_bucket.this.id}/*"]
 
     principals {
-      type        = "Service"
-      identifiers = ["delivery.logs.amazonaws.com"]
+      type        = "AWS"
+      identifiers = ["582318560864"] // TODO: Replace to logdelivery.elasticloadbalancing.amazonaws.com
     }
   }
 }
+
+# data "aws_iam_policy_document" "this" {
+#   statement {
+#     effect    = "Allow"
+#     actions   = ["s3:PutObject", "s3:PutObjectAcl"]
+#     resources = ["arn:aws:s3:::${aws_s3_bucket.this.id}/*"]
+
+#     principals {
+#       type        = "Service"
+#       identifiers = ["logdelivery.elasticloadbalancing.amazonaws.com"]
+#     }
+
+#     condition {
+#       test     = "StringEquals"
+#       variable = "s3:x-amz-acl"
+#       values   = ["bucket-owner-full-control"]
+#     }
+#   }
+# }
 
 ################################################################################
 # Security Group for ALB
@@ -96,7 +119,7 @@ resource "aws_vpc_security_group_ingress_rule" "http" {
   from_port         = 80
   to_port           = 80
   ip_protocol       = "tcp"
-  cidr_ipv4         = var.vpc_cidr_block
+  cidr_ipv4         = "0.0.0.0/0"
 
   description = "Allow HTTP traffic from VPC endpoints"
   tags = {
@@ -110,7 +133,7 @@ resource "aws_vpc_security_group_ingress_rule" "https" {
   from_port         = 443
   to_port           = 443
   ip_protocol       = "tcp"
-  cidr_ipv4         = var.vpc_cidr_block
+  cidr_ipv4         = "0.0.0.0/0"
 
   description = "Allow HTTPS traffic from VPC endpoints"
   tags = {
@@ -121,8 +144,6 @@ resource "aws_vpc_security_group_ingress_rule" "https" {
 
 resource "aws_vpc_security_group_egress_rule" "all" {
   security_group_id = aws_security_group.this.id
-  from_port         = 0
-  to_port           = 0
   ip_protocol       = "-1"
   cidr_ipv4         = "0.0.0.0/0"
 
