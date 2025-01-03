@@ -36,3 +36,27 @@ module "ecs" {
   load_balancer_target_group_arn = module.alb.load_balancer_target_group_arn
   desired_count                  = 3
 }
+
+module "rds" {
+  source             = "../../modules/rds"
+  vpc_id             = module.network.vpc_id
+  private_subnet_ids = module.network.private_subnet_ids
+  source_sg_ids      = [module.ecs.security_group_id]
+  env                = var.env
+  system             = var.system
+  created_by         = local.created_by
+  engine             = "aurora-mysql"
+  engine_version     = "8.0.mysql_aurora.3.02.0"
+  family             = "aurora-mysql8.0"
+  instance_type      = "db.t3.small"
+  instance_count     = 1
+  database_name      = "mydb"
+  master_username    = "admin"
+  rds_params = {
+    "character_set_server"           = "utf8mb4"
+    "collation_server"               = "utf8mb4_unicode_ci"
+    "max_connections"                = "200"
+    "innodb_flush_log_at_trx_commit" = "2"
+    "slow_query_log"                 = "1"
+  }
+}
