@@ -1,4 +1,5 @@
 data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
 
 locals {
   created_by = "Terraform - ${data.aws_caller_identity.current.account_id}"
@@ -22,4 +23,15 @@ module "alb" {
   system            = var.system
   created_by        = local.created_by
   public_subnet_ids = module.network.public_subnet_ids
+}
+
+module "ecs" {
+  source                         = "../../modules/ecs"
+  vpc_id                         = module.network.vpc_id
+  region                         = data.aws_region.current.name
+  env                            = var.env
+  system                         = var.system
+  created_by                     = local.created_by
+  private_subnet_ids             = module.network.private_subnet_ids
+  load_balancer_target_group_arn = module.alb.load_balancer_target_group_arn
 }

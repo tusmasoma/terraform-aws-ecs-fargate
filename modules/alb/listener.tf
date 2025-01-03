@@ -29,7 +29,7 @@ resource "aws_lb_listener_rule" "http" {
 
   condition {
     path_pattern {
-      values = ["/hoge/*"]
+      values = ["/*"]
     }
   }
 }
