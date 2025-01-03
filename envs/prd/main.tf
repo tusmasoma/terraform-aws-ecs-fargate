@@ -34,4 +34,5 @@ module "ecs" {
   created_by                     = local.created_by
   private_subnet_ids             = module.network.private_subnet_ids
   load_balancer_target_group_arn = module.alb.load_balancer_target_group_arn
+  desired_count                  = 3
 }

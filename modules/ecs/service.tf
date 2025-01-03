@@ -5,7 +5,7 @@ resource "aws_ecs_service" "this" {
   name                              = "${var.env}-${var.system}-ecs-service"
   cluster                           = aws_ecs_cluster.this.arn
   task_definition                   = aws_ecs_task_definition.this.arn
-  desired_count                     = 2
+  desired_count                     = var.desired_count
   launch_type                       = "FARGATE"
   platform_version                  = "1.3.0"
   health_check_grace_period_seconds = 60

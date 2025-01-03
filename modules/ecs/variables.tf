@@ -32,3 +32,9 @@ variable "load_balancer_target_group_arn" {
   description = "The ARN of the target group for the load balancer"
   type        = string
 }
+
+variable "desired_count" {
+  description = "The number of tasks to run"
+  type        = number
+  default     = 2
+}

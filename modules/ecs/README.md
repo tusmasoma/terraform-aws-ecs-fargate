@@ -34,6 +34,7 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_created_by"></a> [created\_by](#input\_created\_by) | Tag description for resources made by terraform | `string` | n/a | yes |
+| <a name="input_desired_count"></a> [desired\_count](#input\_desired\_count) | The number of tasks to run | `number` | `2` | no |
 | <a name="input_env"></a> [env](#input\_env) | The environment to deploy to | `string` | n/a | yes |
 | <a name="input_load_balancer_target_group_arn"></a> [load\_balancer\_target\_group\_arn](#input\_load\_balancer\_target\_group\_arn) | The ARN of the target group for the load balancer | `string` | n/a | yes |
 | <a name="input_private_subnet_ids"></a> [private\_subnet\_ids](#input\_private\_subnet\_ids) | The IDs of the private subnets | `list(string)` | n/a | yes |
