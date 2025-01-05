@@ -17,3 +17,8 @@ output "private_subnet_ids" {
   value       = aws_subnet.private.*.id
   description = "The IDs of the private subnets"
 }
+
+output "private_subnet_availability_zones" {
+  value       = aws_subnet.private.*.availability_zone
+  description = "The availability zones"
+}

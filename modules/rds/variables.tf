@@ -8,6 +8,11 @@ variable "private_subnet_ids" {
   type        = list(string)
 }
 
+variable "private_subnet_availability_zones" {
+  description = "The availability zones"
+  type        = list(string)
+}
+
 variable "source_sg_ids" {
   description = "The IDs of the security groups to allow access from"
   type        = list(string)

@@ -1,11 +1,9 @@
 ################################################################################
 # RDS Cluster (Aurora)
 ################################################################################
-data "aws_availability_zones" "this" {}
-
 resource "aws_rds_cluster" "this" {
   cluster_identifier              = "${var.env}-${var.system}-rds-cluster"
-  availability_zones              = data.aws_availability_zones.this.names
+  availability_zones              = var.private_subnet_availability_zones
   engine                          = var.engine
   engine_version                  = var.engine_version
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.this.id
