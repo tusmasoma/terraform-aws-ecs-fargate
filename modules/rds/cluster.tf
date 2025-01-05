@@ -12,6 +12,8 @@ resource "aws_rds_cluster" "this" {
   master_password                 = aws_ssm_parameter.this.value
   vpc_security_group_ids          = [aws_security_group.this.id]
   db_subnet_group_name            = aws_db_subnet_group.this.id
+  skip_final_snapshot             = false
+  final_snapshot_identifier      = "${var.env}-${var.system}-rds-cluster-final-snapshot"
   tags = {
     Name      = "${var.env}-${var.system}-rds-cluster"
     CreatedBy = var.created_by
