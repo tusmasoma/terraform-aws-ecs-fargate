@@ -13,3 +13,8 @@ variable "system" {
   type        = string
   description = "The system name"
 }
+
+variable "domain_name" {
+  type        = string
+  description = "The domain name"
+}

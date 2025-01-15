@@ -15,6 +15,16 @@ module "network" {
   subnet_count   = 2
 }
 
+module "route53" {
+  source                 = "../../modules/route53"
+  env                    = var.env
+  system                 = var.system
+  created_by             = local.created_by
+  domain_name            = var.domain_name
+  load_balancer_dns_name = module.alb.load_balancer_dns_name
+  load_balancer_zone_id  = module.alb.load_balancer_zone_id
+}
+
 module "alb" {
   source            = "../../modules/alb"
   vpc_id            = module.network.vpc_id
