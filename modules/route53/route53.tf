@@ -1,11 +1,11 @@
 ################################################################################
-# Cloudwatch Log For ECS
+# Route53 Record
 ################################################################################
 data "aws_route53_zone" "this" {
   name = var.domain_name
 }
 
-resource "aws_route53_record" "this" {
+resource "aws_route53_record" "domain_alias" {
   zone_id = data.aws_route53_zone.this.zone_id
   name    = data.aws_route53_zone.this.name
   type    = "A"

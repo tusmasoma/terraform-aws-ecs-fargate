@@ -26,13 +26,14 @@ module "route53" {
 }
 
 module "alb" {
-  source            = "../../modules/alb"
-  vpc_id            = module.network.vpc_id
-  vpc_cidr_block    = module.network.vpc_cidr_block
-  env               = var.env
-  system            = var.system
-  created_by        = local.created_by
-  public_subnet_ids = module.network.public_subnet_ids
+  source              = "../../modules/alb"
+  vpc_id              = module.network.vpc_id
+  vpc_cidr_block      = module.network.vpc_cidr_block
+  env                 = var.env
+  system              = var.system
+  created_by          = local.created_by
+  public_subnet_ids   = module.network.public_subnet_ids
+  acm_certificate_arn = module.route53.acm_certificate_arn
 }
 
 module "ecs" {
