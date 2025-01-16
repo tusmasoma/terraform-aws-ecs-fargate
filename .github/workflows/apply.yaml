@@ -1,0 +1,90 @@
+name: terraform apply
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  tf_apply:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-22.04
+    permissions:
+      id-token: write
+      contents: read
+      actions: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Read Terraform version from .terraform-version
+        id: read_tf_version
+        run: |
+          if [ ! -f ".terraform-version" ]; then
+            echo "Error: .terraform-version file not found." >&2
+            exit 1
+          fi
+          TF_VERSION=$(cat .terraform-version | tr -d '\n')
+          echo "Terraform version: $TF_VERSION"
+          echo "TF_VERSION=$TF_VERSION" >> $GITHUB_ENV
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+          terraform_wrapper: false
+
+      - name: Terraform apply
+        id: apply
+        continue-on-error: true
+        run: terraform apply -auto-approve -no-color | tee -a TFLOG
+
+      - name: Truncate Terraform apply result
+        run: |
+          echo "APPLY<<EOF" >> $GITHUB_ENV
+          cat TFLOG | grep -v 'Refreshing state' \
+            | sed -r "s/\x1B\\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g" \
+            | sed -e "/^::debug::/d" \
+            | sed -e s/x-access-token:ghs.*@/x-access-token:****@/g \
+            | tail -c 65000 >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Create comment from apply result
+        uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Terraform Apply 🤖\`${{ steps.apply.outcome }}\`
+
+            <details><summary>Show Apply</summary>
+
+            \`\`\`\n
+            ${ process.env.APPLY }
+            \`\`\`
+
+            </details>
+
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+
+      - name: Error handling
+        if: ${{ steps.apply.outcome == 'failure' }}
+        run: |
+          echo "Error handling"
+          echo ${{ steps.apply.outcome }}
+          exit 1
